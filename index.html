@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Girlfriend's Day! 💕</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1a0826 0%, #3a0033 50%, #6b0f3e 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Floating Canvas Background */
+    #heart-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 650px;
+      padding: 2.5rem 1.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 105, 180, 0.2);
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.2rem;
+      background: linear-gradient(45deg, #ff9a9e, #fecfef, #feada6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      animation: pulse 2s infinite alternate;
+    }
+
+    p.subtitle {
+      font-size: 1.05rem;
+      color: #f3c2db;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    /* Photo Frame Styling */
+    .photo-wrapper {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 2rem;
+      border-radius: 50%;
+      padding: 8px;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff758c);
+      box-shadow: 0 0 25px rgba(255, 65, 108, 0.6);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #fff;
+    }
+
+    /* Audio Controls */
+    .music-control {
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-music {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-music:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    /* Reveal Button */
+    .btn-reveal {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(255, 65, 108, 0.4);
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-reveal:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 25px rgba(255, 65, 108, 0.6);
+    }
+
+    /* Secret Letter Container */
+    .letter {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: left;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0 1.5rem;
+      border-radius: 16px;
+      margin-top: 1.5rem;
+      line-height: 1.7;
+      font-size: 0.95rem;
+      color: #ffeef6;
+    }
+
+    .letter.open {
+      max-height: 600px;
+      opacity: 1;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 182, 193, 0.3);
+    }
+
+    .letter h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #ffb6c1;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Keyframe Animations */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.03); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 2.5rem; }
+      .photo-wrapper { width: 180px; height: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Particle Canvas -->
+  <canvas id="heart-canvas"></canvas>
+
+  <!-- Main Love Card -->
+  <div class="container">
+    <h1>Happy Girlfriend's Day!</h1>
+    <p class="subtitle">To the most amazing person in my universe ✨</p>
+
+    <!-- Girlfriend's Photo -->
+    <div class="photo-wrapper">
+      <!-- Replace 'photo.jpg' with her picture path -->
+      <img id="gf-photo" src="photo.jpg" alt="My Beautiful Girlfriend">
+    </div>
+
+    <!-- Music Player (Optional Background Song) -->
+    <div class="music-control">
+      <button class="btn-music" onclick="toggleMusic()">🎵 <span id="music-text">Play Background Music</span></button>
+      <!-- Put a link to any romantic MP3 file here if you wish -->
+      <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112188.mp3"></audio>
+    </div>
+
+    <!-- Interactive Reveal Button -->
+    <button class="btn-reveal" onclick="revealSurprise()">Tap For A Surprise ❤️</button>
+
+    <!-- Hidden Love Letter -->
+    <div class="letter" id="secret-letter">
+      <h2>My Dearest,</h2>
+      <p>
+        I just wanted to take a moment today to remind you how deeply loved and appreciated you are.
+        You bring so much warmth, laughter, and brightness into my life every single day.
+      </p>
+      <br>
+      <p>
+        Thank you for being my favorite person, my best friend, and my happy place. Happy Girlfriend's Day! 💖
+      </p>
+      <br>
+      <p style="text-align: right; font-weight: 600; font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #ffb6c1;">
+        Forever Yours, <br> [Your Name]
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // 1. Audio Effect Generator (Web Audio API - No external audio files needed for FX!)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playChimeSound() {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, index) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + index * 0.1);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime + index * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + index * 0.1 + 0.6);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + index * 0.1);
+        osc.stop(audioCtx.currentTime + index * 0.1 + 0.6);
+      });
+    }
+
+    // 2. Music Toggle Function
+    const music = document.getElementById('bg-music');
+    const musicBtnText = document.getElementById('music-text');
+    let isPlaying = false;
+
+    function toggleMusic() {
+      if (isPlaying) {
+        music.pause();
+        musicBtnText.innerText = "Play Background Music";
+      } else {
+        music.play();
+        musicBtnText.innerText = "Pause Music";
+      }
+      isPlaying = !isPlaying;
+    }
+
+    // 3. Reveal Secret Letter & Confetti
+    function revealSurprise() {
+      const letter = document.getElementById('secret-letter');
+      letter.classList.toggle('open');
+      
+      // Play Sound
+      playChimeSound();
+
+      // Fire Confetti Burst
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff416c', '#ff4b2b', '#ffb6c1', '#ffffff']
+      });
+    }
+
+    // 4. Floating Hearts Canvas Animation
+    const canvas = document.getElementById('heart-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let hearts = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Heart {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = height + 20;
+        this.size = Math.random() * 15 + 8;
+        this.speed = Math.random() * 1.5 + 0.8;
+        this.opacity = Math.random() * 0.5 + 0.3;
+        this.swing = Math.random() * 0.05;
+        this.swingCount = Math.random() * 100;
+      }
+      update() {
+        this.y -= this.speed;
+        this.swingCount += this.swing;
+        this.x += Math.sin(this.swingCount) * 0.5;
+        if (this.y < -20) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.fillStyle = `rgba(255, 182, 193, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-this.size / 2, -this.size / 2, -this.size, this.size / 3, 0, this.size);
+        ctx.bezierCurveTo(this.size, this.size / 3, this.size / 2, -this.size / 2, 0, 0);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 25; i++) {
+      hearts.push(new Heart());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      hearts.forEach(h => {
+        h.update();
+        h.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
